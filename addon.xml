@@ -5,7 +5,8 @@
 	</requires>
 	<extension point="xbmc.subtitle.module" library="service.py" />
 	<extension point="xbmc.addon.metadata">
-		<summary lang="en">SerialZone.cz</summary>
+		<summary>SerialZone.cz</summary>
 		<description lang="en">Search and download subtitles from serialzone.cz</description>
+		<description lang="cs">Vyhledavani a stahovani titulky ze serialzone.cz</description>
 	</extension>
 </addon>
