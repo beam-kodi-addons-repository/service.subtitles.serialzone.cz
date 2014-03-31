@@ -25,32 +25,39 @@ __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp') ).decode
 
 sys.path.append (__resource__)
 
+from utilities import log
+import SerialZoneClient
+
 def Search(item):
 
   #### Do whats needed to get the list of subtitles from service site
   #### use item["some_property"] that was set earlier
   #### once done, set xbmcgui.ListItem() below and pass it to xbmcplugin.addDirectoryItem()
   
-  listitem = xbmcgui.ListItem(label="English",                                   # language name for the found subtitle
-                              label2="Some_SubtitleFile_name2.srt",               # file name for the found subtitle
-                              iconImage="4",                                     # rating for the subtitle, string 0-5
-                              thumbnailImage="en.gif"                            # language flag, ISO_639_1 language + gif extention, e.g - "en.gif"
-                              )
-                              
-  listitem.setProperty( "sync",        '{0}'.format("true").lower() )  # set to "true" if subtitle is matched by hash,
-                                                                       # indicates that sub is 100 Comaptible
-                                                                      
-  listitem.setProperty( "hearing_imp", '{0}'.format("false").lower() ) # set to "true" if subtitle is for hearing impared
+  cli = SerialZoneClient.SerialZoneClient()
+  found_subtitles = cli.search(item)
+
+  if (found_subtitles == [] or found_subtitles == None):
+    return False
+
+  for subtitle in found_subtitles:
+    listitem = xbmcgui.ListItem(label=subtitle['lang'],                                   # language name for the found subtitle
+                                label2=subtitle['filename'],               # file name for the found subtitle
+                                iconImage=subtitle['rating'],                                     # rating for the subtitle, string 0-5
+                                thumbnailImage=subtitle['language_flag']                            # language flag, ISO_639_1 language + gif extention, e.g - "en.gif"
+                                )
+    listitem.setProperty( "sync", ("false", "true")[int(subtitle['sync'])])  # set to "true" if subtitle is matched by hash,
+    listitem.setProperty( "hearing_imp", "false" ) # set to "true" if subtitle is for hearing impared
   
   
   ## below arguments are optional, it can be used to pass any info needed in download function
   ## anything after "action=download&" will be sent to addon once user clicks listed subtitle to downlaod
-  url = "plugin://%s/?action=download&link=%s&ID=%s&filename=%s" % (__scriptid__,
+    url = "plugin://%s/?action=download&link=%s&ID=%s&filename=%s" % (__scriptid__,
                                                                     "some url for subtitle downlaod",
                                                                     "ID for the downlaod",
                                                                     "filename of the subtitle")
   ## add it to list, this can be done as many times as needed for all subtitles found
-  xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=False) 
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=False) 
 
 
 def Download():
