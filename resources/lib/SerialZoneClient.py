@@ -1,12 +1,23 @@
 # -*- coding: utf-8 -*- 
 
-from utilities import log, hashFile, lng_short2long, lng_short2flag
+from utilities import log, hashFile
 import urllib, re, xbmc, xbmcgui
 
 class SerialZoneClient(object):
 
 	def __init__(self):
 		self.server_url = "http://www.serialzone.cz"
+
+	def download(self,link,dest):
+		log(__name__,'Downloading subtitles from %s' % link)
+		res = urllib.urlopen(link)
+		subtitles_data = res.read()
+
+		log(__name__,'Saving to file %s' % dest)
+		zip_file = open(dest,'wb')
+		zip_file.write(subtitles_data)
+		zip_file.close()
+
 
 	def search(self,item):
 		tvshow_url = self.search_show_url(item['tvshow'])
@@ -36,11 +47,10 @@ class SerialZoneClient(object):
 			result_subtitles.append({ 
 				'filename': print_out_filename,
 				'link': episode_subtitle['link'],
-				'lang': lng_short2long(episode_subtitle['lang']),
+				'lang': episode_subtitle['lang'],
 	 			'rating': str(episode_subtitle['down_count']*5/max_down_count),
 				'sync': (episode_subtitle['file_size'] == file_size),
-				'language_flag': lng_short2flag(episode_subtitle['lang']),
-				'language_name': lng_short2long(episode_subtitle['lang']),
+				'lang_flag': xbmc.convertLanguage(episode_subtitle['lang'],xbmc.ISO_639_1),
 			})
 		
 		log(__name__,"Search RESULT")
@@ -132,6 +142,10 @@ class SerialZoneClient(object):
 				else:
 					subtitle_version = {}
 					subtitle_version['lang'] = re.search("<div class=\"sub-info-menu sb-lang\">(.+?)</div>", html_subtitle).group(1)
+					if subtitle_version['lang'].upper() == "CZ":
+						subtitle_version['lang'] = "Czech"
+					if subtitle_version['lang'].upper() == "SK":
+						subtitle_version['lang'] = "Slovak"
 					subtitle_version['link'] = re.search("<a href=\"(.+?)\" .+? class=\"sub-info-menu sb-down\">",html_subtitle).group(1)
 					subtitle_version['author'] = re.sub("<[^<]+?>", "",(re.search("<div class=\"sub-info-auth\">(.+?)</div>",html_subtitle).group(1)))
 					subtitle_version['rip'] = re.search("<div class=\"sil\">Verze / Rip:</div><div class=\"sid\"><b>(.+?)</b>",html_subtitle).group(1)

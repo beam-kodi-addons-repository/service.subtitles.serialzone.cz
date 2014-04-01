@@ -6,42 +6,6 @@ import struct
 def log(module, msg):
     xbmc.log((u"### [%s] - %s" % (module, msg,)).encode('utf-8'), level=xbmc.LOGDEBUG)
 
-def download_subtitles (subtitles_list, pos, zip_subs, tmp_sub_dir, sub_folder, session_id): #standard input
-
-	selected_subtitles = subtitles_list[pos]
-
-	log(__name__, selected_subtitles)
-
-	log(__name__,'Downloading subtitle zip')
-	res = urllib.urlopen(selected_subtitles['link'])
-	subtitles_data = res.read()
-
-	log(__name__,'Saving to file %s' % zip_subs)
-	zip_file = open(zip_subs,'wb')
-	zip_file.write(subtitles_data)
-	zip_file.close()
-
-	# Standard output -
-	# True if the file is packed as zip: addon will automatically unpack it.
-	# language of subtitles,
-	# Name of subtitles file if not packed (or if we unpacked it ourselves)
-	# return False, language, subs_file
-	return True, selected_subtitles['lang'],""
-
-def lng_short2long(lang):
-	if lang == 'CZ': return 'Czech'
-	if lang == 'SK': return 'Slovak'
-	return 'English'
-
-def lng_long2short(lang):
-	if lang == 'Czech': return 'CZ'
-	if lang == 'Slovak': return 'SK'
-	return 'EN'
-
-def lng_short2flag(lang):
-	if lang == 'CZ': return 'cs'
-	if lang == 'SK': return 'sk'
-
 def hashFile(file_path, rar):
     if rar:
       return hashRar(file_path)
