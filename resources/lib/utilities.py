@@ -6,6 +6,13 @@ import struct
 def log(module, msg):
     xbmc.log((u"### [%s] - %s" % (module, msg,)).encode('utf-8'), level=xbmc.LOGDEBUG)
 
+def file_size_and_hash(filename, rar):
+	try:
+		file_size, file_hash = hashFile(filename, rar)
+	except:
+		file_size, file_hash = -1, None
+	return file_size, file_hash
+
 def hashFile(file_path, rar):
     if rar:
       return hashRar(file_path)

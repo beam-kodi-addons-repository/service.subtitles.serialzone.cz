@@ -23,11 +23,8 @@ class SerialZoneClient(object):
 		tvshow_url = self.search_show_url(item['tvshow'])
 		if tvshow_url == None:
 			return None
-		
-		try:
-			file_size, file_hash = hashFile(item['file_original_path'], item['rar'])
-		except:
-			file_size, file_hash = -1, None
+
+		file_size, file_hash = file_size_and_hash(item['file_original_path'], item['rar'])
 		log(__name__, "File size: " + str(file_size))
 
 		found_season_subtitles = self.search_season_subtitles(tvshow_url,item['season'])
