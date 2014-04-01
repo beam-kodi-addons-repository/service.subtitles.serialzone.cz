@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-from utilities import log, hashFile
+from utilities import log, file_size_and_hash
 import urllib, re, xbmc, xbmcgui
 
 class SerialZoneClient(object):

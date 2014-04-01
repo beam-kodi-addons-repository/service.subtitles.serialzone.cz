@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*- 
 
+import os
 import xbmc, xbmcvfs
 import struct
 
@@ -12,6 +13,21 @@ def file_size_and_hash(filename, rar):
 	except:
 		file_size, file_hash = -1, None
 	return file_size, file_hash
+
+def extract_subtitles(archive_dir):
+	xbmc.executebuiltin(('XBMC.Extract("%s")' % archive_dir).encode('utf-8'))
+	xbmc.sleep(1000)
+	basepath = os.path.dirname(archive_dir)
+	extracted_files = os.listdir(basepath)
+	exts = [".srt", ".sub", ".txt", ".smi", ".ssa", ".ass" ]
+	extracted_subtitles = []
+	if len(extracted_files) < 1 :
+		return []
+	else:
+		for extracted_file in extracted_files:
+			if os.path.splitext(extracted_file)[1] in exts:
+				extracted_subtitles.append(os.path.join(basepath, extracted_file))
+	return extracted_subtitles
 
 def hashFile(file_path, rar):
     if rar:

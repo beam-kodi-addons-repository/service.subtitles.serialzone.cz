@@ -25,7 +25,7 @@ __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp') ).decode
 
 sys.path.append (__resource__)
 
-from utilities import log
+from utilities import log, extract_subtitles
 import SerialZoneClient
 
 def Search(item):
@@ -66,8 +66,9 @@ def Download(link):
 
   cli = SerialZoneClient.SerialZoneClient()
   cli.download(link, os.path.join(__temp__, "download.zip"))
-
-  # subtitle_list.append("/Path/Of/Subtitle.srt") # this can be url, local path or network path.
+  log(__scriptname__,"Extracting subtitles")
+  subtitle_list = extract_subtitles(os.path.join(__temp__, "download.zip"))
+  log(__scriptname__,subtitle_list)
   # subtitle_list.append("/Path/Of/Subtitle2.srt") # this can be url, local path or network path.
   
   return subtitle_list
