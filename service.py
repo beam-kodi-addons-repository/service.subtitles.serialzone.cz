@@ -65,9 +65,10 @@ def Download(link):
   xbmcvfs.mkdirs(__temp__)
 
   cli = SerialZoneClient.SerialZoneClient()
-  cli.download(link, os.path.join(__temp__, "download.zip"))
+  downloaded_file = cli.download(link,__temp__)
+  
   log(__scriptname__,"Extracting subtitles")
-  subtitle_list = extract_subtitles(os.path.join(__temp__, "download.zip"))
+  subtitle_list = extract_subtitles(downloaded_file)
   log(__scriptname__,subtitle_list)
   # subtitle_list.append("/Path/Of/Subtitle2.srt") # this can be url, local path or network path.
   

@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*- 
 
 from utilities import log, file_size_and_hash
-import urllib, re, xbmc, xbmcgui
+import urllib, re, os, xbmc, xbmcgui
 
 class SerialZoneClient(object):
 
 	def __init__(self):
 		self.server_url = "http://www.serialzone.cz"
 
-	def download(self,link,dest):
+	def download(self,link,dest_dir):
+
+		dest = os.path.join(dest_dir, "download.zip")
+
 		log(__name__,'Downloading subtitles from %s' % link)
 		res = urllib.urlopen(link)
 		subtitles_data = res.read()
@@ -17,6 +20,8 @@ class SerialZoneClient(object):
 		zip_file = open(dest,'wb')
 		zip_file.write(subtitles_data)
 		zip_file.close()
+
+		return dest
 
 
 	def search(self,item):

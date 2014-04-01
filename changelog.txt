@@ -1,2 +1,5 @@
+v0.0.2 (1.4.2014)
+- drobne interni zmeny
+
 v0.0.1 (30.3.2014)
 - preklopeni puvodni verze na Gotham
