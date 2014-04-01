@@ -110,7 +110,7 @@ class SerialZoneClient(object):
 			return None
 		elif (found_tv_shows.__len__() == 1):
 			log(__name__,"One TVShow found, auto select")
-			return found_tv_shows[0]['url']
+			tvshow_url = found_tv_shows[0]['url']
 		else:
 			log(__name__,"More TVShows found, user dialog for select")
 			menu_dialog = []
@@ -125,8 +125,9 @@ class SerialZoneClient(object):
 			if (found_tv_show_id == -1):
 				return None
 			tvshow_url = found_tv_shows[found_tv_show_id]['url']
-			log(__name__,"Selected show URL: " + tvshow_url)
-			return tvshow_url
+
+		log(__name__,"Selected show URL: " + tvshow_url)
+		return tvshow_url
 
 	def search_season_subtitles(self, show_url, show_series):
 		res = urllib.urlopen(show_url + "titulky/" + show_series + "-rada/")
@@ -143,11 +144,9 @@ class SerialZoneClient(object):
 					subtitle['versions'] = []
 				else:
 					subtitle_version = {}
-					subtitle_version['lang'] = re.search("<div class=\"sub-info-menu sb-lang\">(.+?)</div>", html_subtitle).group(1)
-					if subtitle_version['lang'].upper() == "CZ":
-						subtitle_version['lang'] = "Czech"
-					if subtitle_version['lang'].upper() == "SK":
-						subtitle_version['lang'] = "Slovak"
+					subtitle_version['lang'] = re.search("<div class=\"sub-info-menu sb-lang\">(.+?)</div>", html_subtitle).group(1).upper()
+					if subtitle_version['lang'] == "CZ": subtitle_version['lang'] = "Czech"
+					if subtitle_version['lang'] == "SK": subtitle_version['lang'] = "Slovak"
 					subtitle_version['link'] = re.search("<a href=\"(.+?)\" .+? class=\"sub-info-menu sb-down\">",html_subtitle).group(1)
 					subtitle_version['author'] = re.sub("<[^<]+?>", "",(re.search("<div class=\"sub-info-auth\">(.+?)</div>",html_subtitle).group(1)))
 					subtitle_version['rip'] = re.search("<div class=\"sil\">Verze / Rip:</div><div class=\"sid\"><b>(.+?)</b>",html_subtitle).group(1)
