@@ -8,5 +8,7 @@
 		<summary>SerialZone.cz</summary>
 		<description lang="en">Search and download subtitles from serialzone.cz</description>
 		<description lang="cs">Vyhledavani a stahovani titulky ze serialzone.cz</description>
+		<source>https://github.com/beam/service.subtitles.serialzone.cz</source>
+		<email>ondra@bimovi.cz</email>
 	</extension>
 </addon>
