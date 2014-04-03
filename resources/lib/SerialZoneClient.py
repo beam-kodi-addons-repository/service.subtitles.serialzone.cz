@@ -2,6 +2,7 @@
 
 from utilities import log, file_size_and_hash
 import urllib, re, os, xbmc, xbmcgui
+import HTMLParser
 
 class SerialZoneClient(object):
 
@@ -47,7 +48,7 @@ class SerialZoneClient(object):
 				print_out_filename = print_out_filename + "(" + episode_subtitle['notes'] + ")"
 
 			result_subtitles.append({ 
-				'filename': print_out_filename,
+				'filename': HTMLParser.HTMLParser().unescape(print_out_filename),
 				'link': episode_subtitle['link'],
 				'lang': episode_subtitle['lang'],
 	 			'rating': str(episode_subtitle['down_count']*5/max_down_count),
