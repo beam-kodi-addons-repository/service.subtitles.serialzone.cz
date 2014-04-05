@@ -6,11 +6,13 @@ import HTMLParser
 
 class SerialZoneClient(object):
 
-	def __init__(self):
+	def __init__(self,addon):
 		self.server_url = "http://www.serialzone.cz"
+		self.addon = addon
 
-	def download(self,link,dest_dir):
+	def download(self,link):
 
+		dest_dir = os.path.join(xbmc.translatePath(self.addon.getAddonInfo('profile').decode("utf-8")), 'temp')
 		dest = os.path.join(dest_dir, "download.zip")
 
 		log(__name__,'Downloading subtitles from %s' % link)
@@ -122,7 +124,7 @@ class SerialZoneClient(object):
 					menu_dialog.append(found_tv_show['title'] + " / " + found_tv_show['orig_title'] + " - " + found_tv_show['years'])
 			dialog = xbmcgui.Dialog()
 			# TODO: translate
-			found_tv_show_id = dialog.select("Select show", menu_dialog)
+			found_tv_show_id = dialog.select("Select TV show", menu_dialog)
 			if (found_tv_show_id == -1):
 				return None
 			tvshow_url = found_tv_shows[found_tv_show_id]['url']

@@ -34,7 +34,7 @@ def Search(item):
   #### use item["some_property"] that was set earlier
   #### once done, set xbmcgui.ListItem() below and pass it to xbmcplugin.addDirectoryItem()
   
-  cli = SerialZoneClient.SerialZoneClient()
+  cli = SerialZoneClient.SerialZoneClient(__addon__)
   found_subtitles = cli.search(item)
 
   if (found_subtitles == [] or found_subtitles == None):
@@ -64,8 +64,8 @@ def Download(link):
     shutil.rmtree(__temp__)
   xbmcvfs.mkdirs(__temp__)
 
-  cli = SerialZoneClient.SerialZoneClient()
-  downloaded_file = cli.download(link,__temp__)
+  cli = SerialZoneClient.SerialZoneClient(__addon__)
+  downloaded_file = cli.download(link)
   
   log(__scriptname__,"Extracting subtitles")
   subtitle_list = extract_subtitles(downloaded_file)

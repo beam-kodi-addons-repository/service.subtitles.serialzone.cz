@@ -1,3 +1,6 @@
+v0.0.3 (3.4.2014)
+- unescape na jmeno titulku
+
 v0.0.2 (1.4.2014)
 - drobne interni zmeny
 
