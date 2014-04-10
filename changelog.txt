@@ -1,5 +1,6 @@
 v0.0.4 (10.4.2014)
 	- manualni vyhledavani (pouze pro vyhledani serialu)
+	- fix vyhledavani pokud titulky nebyly z webu nikdy stazeny
 
 v0.0.3 (3.4.2014)
 	- unescape na jmeno titulku

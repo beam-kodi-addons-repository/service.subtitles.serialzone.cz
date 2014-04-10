@@ -57,7 +57,7 @@ class SerialZoneClient(object):
 				'filename': HTMLParser.HTMLParser().unescape(print_out_filename),
 				'link': episode_subtitle['link'],
 				'lang': episode_subtitle['lang'],
-	 			'rating': str(episode_subtitle['down_count']*5/max_down_count),
+				'rating': str(episode_subtitle['down_count']*5/max_down_count) if max_down_count > 0 else "0",
 				'sync': (episode_subtitle['file_size'] == file_size),
 				'lang_flag': xbmc.convertLanguage(episode_subtitle['lang'],xbmc.ISO_639_1),
 			})
