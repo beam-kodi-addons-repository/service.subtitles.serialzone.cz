@@ -1,5 +1,5 @@
 v0.0.5 (13.4.2014)
-	- moznost vynechani clenu The z nazvu pri vyhledavani
+	- moznost vynechani clenu The z nazvu pri vyhledavani (zapnuto)
 
 v0.0.4 (10.4.2014)
 	- manualni vyhledavani (pouze pro vyhledani serialu)
