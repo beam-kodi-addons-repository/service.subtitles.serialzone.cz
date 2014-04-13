@@ -34,7 +34,7 @@ class SerialZoneClient(object):
 		else:
 			title = item['tvshow']
 			if self.addon.getSetting("ignore_articles") and re.match(r'^The ',title,re.IGNORECASE):
-				log(__name__, "Ignoring The in Ttitle")
+				log(__name__, "Ignoring The in Title")
 				title = re.sub(r'(?i)^The ',"", title)
 
 		tvshow_url = self.search_show_url(title)
