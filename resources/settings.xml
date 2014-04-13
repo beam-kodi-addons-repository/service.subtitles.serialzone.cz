@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="Search">
+      <setting id="ignore_articles" type="bool" label="Ignore articles when searching ('The')" default="true"/>
+    </category>
+</settings>
