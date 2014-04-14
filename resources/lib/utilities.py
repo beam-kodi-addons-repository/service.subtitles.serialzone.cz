@@ -1,8 +1,50 @@
 # -*- coding: utf-8 -*- 
 
-import os
+import os, sys
 import xbmc, xbmcvfs
 import struct
+
+from datetime import datetime
+
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
+
+
+def get_current_episode_first_air_date():
+
+    json_query = xbmc.executeJSONRPC('{ \
+         "jsonrpc": "2.0", \
+         "method": "Player.GetActivePlayers", \
+         "id": "PlayerID" }'
+    )
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    jsonobject = simplejson.loads(json_query)
+    if jsonobject.has_key('result') and jsonobject['result'].__len__() > 0:
+      playerid = jsonobject['result'][0]['playerid']
+    else:
+      return None
+
+    json_query = xbmc.executeJSONRPC('{ \
+        "jsonrpc": "2.0", \
+        "method": "Player.GetItem", \
+        "params": { "properties": ["firstaired"], "playerid": %s },\
+        "id": "EpisodeGetItem" }' % playerid)
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    jsonobject = simplejson.loads(json_query)
+    if jsonobject.has_key('result') and jsonobject['result'].has_key('item'):
+        first_air_date = jsonobject['result']['item']['firstaired']
+        if first_air_date == '': return None
+
+    # try:
+        # log(__name__, first_air_date)
+        # datetime.strptime(str(first_air_date), '%Y-%m-%d')
+    # except
+        # return None
+
+    log(__name__, "First air date: %s" % first_air_date)
+    return first_air_date
 
 def log(module, msg):
     xbmc.log((u"### [%s] - %s" % (module, msg,)).encode('utf-8'), level=xbmc.LOGDEBUG)
