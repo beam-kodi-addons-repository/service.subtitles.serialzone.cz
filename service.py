@@ -118,7 +118,6 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
   item['first_air_date']     = None
   if not item['tvshow'] == '' and item['year'] == '':
     item['first_air_date'] = get_current_episode_first_air_date()
-    log(__scriptname__, item['first_air_date'])
 
   if 'searchstring' in params:
     item['mansearch'] = True
