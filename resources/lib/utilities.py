@@ -5,6 +5,7 @@ import xbmc, xbmcvfs
 import struct
 
 from datetime import datetime
+import time
 
 if sys.version_info < (2, 7):
     import simplejson
@@ -41,13 +42,14 @@ def get_current_episode_first_air_date():
         log(__name__, "First air date 1969-12-31 => None")
         return None
 
-    # try:
-        # log(__name__, first_air_date)
-        # datetime.strptime(str(first_air_date), '%Y-%m-%d')
-    # except
-        # return None
+    # http://forum.xbmc.org/showthread.php?tid=112916
+    date_format = "%Y-%m-%d"
+    try:
+        first_air_date = datetime.strptime(first_air_date, date_format).date()
+    except TypeError:
+        first_air_date = datetime(*(time.strptime(first_air_date, date_format)[0:6])).date()
 
-    log(__name__, "First air date: %s" % first_air_date)
+    log(__name__, "Current epoisode first air date: %s" % first_air_date)
     return first_air_date
 
 def log(module, msg):
