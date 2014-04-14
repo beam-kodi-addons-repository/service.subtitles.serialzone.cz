@@ -37,6 +37,10 @@ def get_current_episode_first_air_date():
         first_air_date = jsonobject['result']['item']['firstaired']
         if first_air_date == '': return None
 
+    if first_air_date == "1969-12-31":
+        log(__name__, "First air date 1969-12-31 => None")
+        return None
+
     # try:
         # log(__name__, first_air_date)
         # datetime.strptime(str(first_air_date), '%Y-%m-%d')
