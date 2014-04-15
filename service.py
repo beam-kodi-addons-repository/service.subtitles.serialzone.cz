@@ -25,7 +25,7 @@ __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp') ).decode
 
 sys.path.append (__resource__)
 
-from utilities import log, extract_subtitles, get_current_episode_first_air_date
+from utilities import log, extract_subtitles
 import SerialZoneClient
 
 def Search(item):
