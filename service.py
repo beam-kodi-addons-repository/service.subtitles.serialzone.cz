@@ -115,10 +115,6 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
   item['file_original_path'] = urllib.unquote(xbmc.Player().getPlayingFile().decode('utf-8'))  # Full path of a playing file
   item['3let_language']      = []
 
-  # item['first_air_date']     = None
-  # if not item['tvshow'] == '' and item['year'] == '':
-  #   item['first_air_date'] = get_current_episode_first_air_date()
-
   if 'searchstring' in params:
     item['mansearch'] = True
     item['mansearchstr'] = urllib.unquote(params['searchstring']).decode('utf-8')

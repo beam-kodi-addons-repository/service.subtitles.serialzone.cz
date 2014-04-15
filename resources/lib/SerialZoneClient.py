@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-from utilities import log, file_size_and_hash
+from utilities import log, file_size_and_hash, get_current_episode_first_air_date
 import urllib, re, os, xbmc, xbmcgui
 import HTMLParser
 
@@ -114,6 +114,26 @@ class SerialZoneClient(object):
 				show['url'], show['title'], show['years'], show['orig_title'] = re.search(show_reg_exp, row).groups()
 				show['years'] = show['years'].replace("&#8211;", "-")
 				found_tv_shows.append(show)
+
+		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1:
+			first_air_date = get_current_episode_first_air_date()
+
+		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1 and first_air_date:
+			log(__name__, "Filtr by year")
+			filtred_found_tv_shows = []
+			for found_tv_show in found_tv_shows:
+				year_reg_exp = re.compile("^([\d]{4})(|-)([\d]{4}|[\?]{4}|$)")
+				year_from, year_sep , year_to = re.search(year_reg_exp, found_tv_show["years"]).groups()
+				if year_to == "????":
+					if int(year_from) <= first_air_date.year: filtred_found_tv_shows.append(found_tv_show)
+				elif year_to == '':
+					if int(year_from) == first_air_date.year: filtred_found_tv_shows.append(found_tv_show)
+				else:
+					if int(year_from) <= first_air_date.year and int(year_to) >= first_air_date.year: filtred_found_tv_shows.append(found_tv_show)
+
+			if filtred_found_tv_shows.__len__() > 0 and not filtred_found_tv_shows.__len__() == found_tv_shows.__len__():
+				log(__name__, "TV show filtred by year")
+				found_tv_shows = filtred_found_tv_shows
 
 		if (found_tv_shows.__len__() == 0):
 			log(__name__,"TVShow not found, stop")

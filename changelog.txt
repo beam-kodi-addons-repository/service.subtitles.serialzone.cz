@@ -1,3 +1,6 @@
+v0.0.7
+- moznost filtrace serialu podle roku vysilani
+
 v0.0.6 (15.4.2014)
 - uprava velikosti ikony
 
