@@ -1,15 +1,18 @@
+v0.0.6 (15.4.2014)
+- uprava velikosti ikony
+
 v0.0.5 (13.4.2014)
-	- moznost vynechani clenu The z nazvu pri vyhledavani (zapnuto)
+- moznost vynechani clenu The z nazvu pri vyhledavani (zapnuto)
 
 v0.0.4 (10.4.2014)
-	- manualni vyhledavani (pouze pro vyhledani serialu)
-	- fix vyhledavani pokud titulky nebyly z webu nikdy stazeny
+- manualni vyhledavani (pouze pro vyhledani serialu)
+- fix vyhledavani pokud titulky nebyly z webu nikdy stazeny
 
 v0.0.3 (3.4.2014)
-	- unescape na jmeno titulku
+- unescape na jmeno titulku
 
 v0.0.2 (1.4.2014)
-	- drobne interni zmeny
+- drobne interni zmeny
 
 v0.0.1 (30.3.2014)
-	- preklopeni puvodni verze na Gotham
+- preklopeni puvodni verze na Gotham
