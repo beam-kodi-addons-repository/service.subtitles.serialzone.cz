@@ -25,7 +25,7 @@ __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp') ).decode
 
 sys.path.append (__resource__)
 
-from utilities import log, extract_subtitles
+from utilities import log, extract_subtitles, copy_subtitles_on_rar
 import SerialZoneClient
 
 def Search(item):
@@ -51,12 +51,12 @@ def Search(item):
   
   ## below arguments are optional, it can be used to pass any info needed in download function
   ## anything after "action=download&" will be sent to addon once user clicks listed subtitle to downlaod
-    url = "plugin://%s/?action=download&link=%s" % (__scriptid__, urllib.quote(subtitle['link']))
+    url = "plugin://%s/?action=download&link=%s&lang=%s" % (__scriptid__, urllib.quote(subtitle['link']),subtitle['lang'])
   ## add it to list, this can be done as many times as needed for all subtitles found
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listitem,isFolder=False) 
 
 
-def Download(link):
+def Download(link, lang):
   subtitle_list = []
   ## Cleanup temp dir, we recomend you download/unzip your subs in temp folder and
   ## pass that to XBMC to copy and activate
@@ -72,6 +72,8 @@ def Download(link):
   log(__scriptname__,subtitle_list)
   # subtitle_list.append("/Path/Of/Subtitle2.srt") # this can be url, local path or network path.
   
+  if __addon__.getSetting("copy_subs_if_rar_played") == "true": copy_subtitles_on_rar(subtitle_list,lang)
+
   return subtitle_list
  
 def normalizeString(str):
@@ -144,7 +146,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
 
 elif params['action'] == 'download':
   ## we pickup all our arguments sent from def Search()
-  subs = Download(urllib.unquote(params["link"]))
+  subs = Download(urllib.unquote(params["link"]),params["lang"])
   ## we can return more than one subtitle for multi CD versions, for now we are still working out how to handle that in XBMC core
   for sub in subs:
     listitem = xbmcgui.ListItem(label=sub)
