@@ -101,6 +101,7 @@ class SerialZoneClient(object):
 		log(__name__,"Search URL: " + url_search)
 		res = urllib.urlopen(url_search)
 
+		log(__name__, "Parsing tv show results")
 		found_tv_shows = []
 		try:
 			res_body = re.search("<div class=\"column4 wd2 fl-left\">(.+?)<div class=\"cl12px fl-left\"></div>",res.read(), re.IGNORECASE | re.DOTALL).group(1)
@@ -116,6 +117,7 @@ class SerialZoneClient(object):
 				found_tv_shows.append(show)
 
 		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1:
+			log(__name__, "Getting first air date")
 			first_air_date = get_current_episode_first_air_date()
 
 		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1 and first_air_date:
