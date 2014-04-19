@@ -191,7 +191,7 @@ class SerialZoneClient(object):
 						subtitle_version['file_size'] = re.search("<span class=\"fl-right\" title=\".+\">\((.+?) b\)</span>",html_subtitle).group(1)
 						subtitle_version['file_size'] = int(subtitle_version['file_size'].replace(" ",""))
 					except:
-						subtitle_version['file_size'] = -1
+						subtitle_version['file_size'] = None
 					subtitle['versions'].append(subtitle_version)
 			# print subtitle
 			subtitles.append(subtitle)
