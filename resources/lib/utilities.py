@@ -82,6 +82,15 @@ def get_current_episode_first_air_date():
     log(__name__, "Current epoisode first air date: %s" % first_air_date)
     return first_air_date
 
+def file_size(filename, is_rar):
+    try:
+        if is_rar:
+            file_size = file_size_from_rar(filename)
+            return -1 if file_size == None else file_size
+        else:
+            return xbmcvfs.Stat(filename).st_size()
+    except:
+        return -1
 
 # Based on https://github.com/markokr/rarfile/blob/master/rarfile.py
 def file_size_from_rar(first_rar_filename):
