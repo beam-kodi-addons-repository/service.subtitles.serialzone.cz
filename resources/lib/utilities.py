@@ -3,6 +3,7 @@
 import os, sys
 import xbmc, xbmcvfs
 import struct
+from struct import Struct
 import urllib
 
 from datetime import datetime
@@ -80,6 +81,56 @@ def get_current_episode_first_air_date():
 
     log(__name__, "Current epoisode first air date: %s" % first_air_date)
     return first_air_date
+
+
+# Based on https://github.com/markokr/rarfile/blob/master/rarfile.py
+def file_size_from_rar(first_rar_filename):
+
+    log_name = __name__ + " [RAR]"
+
+    RAR_BLOCK_MAIN          = 0x73 # s
+    RAR_BLOCK_FILE          = 0x74 # t
+    RAR_FILE_LARGE          = 0x0100
+    RAR_ID = str("Rar!\x1a\x07\x00")
+
+    S_BLK_HDR = Struct('<HBHH')
+    S_FILE_HDR = Struct('<LLBLLBBHL')
+    S_LONG = Struct('<L')
+
+    fd = xbmcvfs.File(first_rar_filename)
+    if fd.read(len(RAR_ID)) == RAR_ID:
+        log(log_name, "Reading file headers")
+        while True:
+
+            buf = fd.read(S_BLK_HDR.size)
+            if not buf: return None
+
+            t = S_BLK_HDR.unpack_from(buf)
+            header_crc, header_type, header_flags, header_size = t
+            pos = S_BLK_HDR.size
+
+            # read full header
+            header_data = buf + fd.read(header_size - S_BLK_HDR.size) if header_size > S_BLK_HDR.size else buf
+
+            if len(header_data) != header_size: return None # unexpected EOF?
+
+            if header_type == RAR_BLOCK_MAIN:
+                log(log_name, "Main block found")
+                continue
+            elif header_type == RAR_BLOCK_FILE:
+                log(log_name, "File block found")
+                file_size = S_FILE_HDR.unpack_from(header_data, pos)[1]
+                log(log_name, "File in rar size: %s" % file_size)
+                if header_flags & RAR_FILE_LARGE: # Large file support
+                    log(log_name, "Large file flag")
+                    file_size |= S_LONG.unpack_from(header_data, pos + S_FILE_HDR.size + 4)[0] << 32
+                    log(log_name, "File in rar size: %s after large file" % file_size)
+                return file_size
+            else:
+                log(__name__, "RAR unknown header type %s" % header_type)
+                return None
+    else:
+        return None
 
 def file_size_and_hash(filename, rar):
 	try:
