@@ -26,7 +26,7 @@ __temp__       = xbmc.translatePath( os.path.join( __profile__, 'temp') ).decode
 sys.path.append (__resource__)
 
 from utilities import log, extract_subtitles, copy_subtitles_on_rar
-import SerialZoneClient
+from SerialZoneClient import SerialZoneClient as SubtitlesClient
 
 def Search(item):
 
@@ -34,7 +34,7 @@ def Search(item):
   #### use item["some_property"] that was set earlier
   #### once done, set xbmcgui.ListItem() below and pass it to xbmcplugin.addDirectoryItem()
   
-  cli = SerialZoneClient.SerialZoneClient(__addon__)
+  cli = SubtitlesClient(__addon__)
   found_subtitles = cli.search(item)
 
   if (found_subtitles == [] or found_subtitles == None):
@@ -64,7 +64,7 @@ def Download(link, lang):
     shutil.rmtree(__temp__)
   xbmcvfs.mkdirs(__temp__)
 
-  cli = SerialZoneClient.SerialZoneClient(__addon__)
+  cli = SubtitlesClient(__addon__)
   downloaded_file = cli.download(link)
   
   log(__scriptname__,"Extracting subtitles")
