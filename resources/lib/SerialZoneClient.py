@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*- 
 
-from utilities import log, file_size_and_hash, get_current_episode_first_air_date
+from utilities import log, get_file_size, get_current_episode_first_air_date
 import urllib, re, os, xbmc, xbmcgui
 import HTMLParser
 
@@ -40,7 +40,7 @@ class SerialZoneClient(object):
 		tvshow_url = self.search_show_url(title)
 		if tvshow_url == None: return None
 
-		file_size, file_hash = file_size_and_hash(item['file_original_path'], item['rar'])
+		file_size = get_file_size(item['file_original_path'], item['rar'])
 		log(__name__, "File size: " + str(file_size))
 
 		found_season_subtitles = self.search_season_subtitles(tvshow_url,item['season'])
