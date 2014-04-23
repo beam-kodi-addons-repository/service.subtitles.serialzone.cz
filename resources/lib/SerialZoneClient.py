@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 from utilities import log, get_file_size, get_current_episode_first_air_date
-import urllib, re, os, xbmc, xbmcgui
+import urllib, re, os, copy, xbmc, xbmcgui
 import HTMLParser
 
 class SerialZoneClient(object):
@@ -98,11 +98,8 @@ class SerialZoneClient(object):
 		if not filter_subtitles_list:
 			return None
 		else:
-			filter_results_list = {
-				'season': subtitles_list['season'],
-				'episode': subtitles_list['episode'],
-				'versions': filter_subtitles_list
-				}
+			filter_results_list = copy.deepcopy(subtitles_list)
+			filter_results_list['versions'] = filter_subtitles_list
 			return filter_results_list
 
 	def detect_max_download_stats(self, episode_subtitle_list):
