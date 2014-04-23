@@ -44,13 +44,20 @@ class SerialZoneClient(object):
 		log(__name__, "File size: " + str(file_size))
 
 		found_season_subtitles = self.search_season_subtitles(tvshow_url,item['season'])
+		log(__name__, ["Season filter", found_season_subtitles])
+
 		episode_subtitle_list = self.filter_episode_from_season_subtitles(found_season_subtitles,item['season'],item['episode'])
+		log(__name__, ["Episode filter", episode_subtitle_list])
 		if episode_subtitle_list == None: return None
 
-		max_down_count = self.detect_max_download_stats(episode_subtitle_list)
+		lang_filetred_episode_subtitle_list = self.filter_subtitles_by_language(item['3let_language'], episode_subtitle_list)
+		log(__name__, ["Language filter", lang_filetred_episode_subtitle_list])
+		if lang_filetred_episode_subtitle_list == None: return None
+
+		max_down_count = self.detect_max_download_stats(lang_filetred_episode_subtitle_list)
 
 		result_subtitles = []
-		for episode_subtitle in episode_subtitle_list['versions']:
+		for episode_subtitle in lang_filetred_episode_subtitle_list['versions']:
 
 			print_out_filename = episode_subtitle['rip'] + " by " + episode_subtitle['author']
 			if not episode_subtitle['notes'] == None:
@@ -65,8 +72,7 @@ class SerialZoneClient(object):
 				'lang_flag': xbmc.convertLanguage(episode_subtitle['lang'],xbmc.ISO_639_1),
 			})
 		
-		log(__name__,"Search RESULT")
-		log(__name__,result_subtitles)
+		log(__name__,["Search RESULT", result_subtitles])
 		return result_subtitles
 
 
@@ -78,8 +84,26 @@ class SerialZoneClient(object):
 				episode_subtitle_list = season_subtitle
 				break
 
-		log(__name__, episode_subtitle_list)
 		return episode_subtitle_list
+
+	def filter_subtitles_by_language(self, set_languages, subtitles_list):
+		if not set_languages: return subtitles_list
+
+		log(__name__, ['Filter by Languages', set_languages])
+		filter_subtitles_list = []
+		for subtitle in subtitles_list['versions']:
+			if xbmc.convertLanguage(subtitle['lang'],xbmc.ISO_639_2) in set_languages:
+				filter_subtitles_list.append(subtitle)
+
+		if not filter_subtitles_list:
+			return None
+		else:
+			filter_results_list = {
+				'season': subtitles_list['season'],
+				'episode': subtitles_list['episode'],
+				'versions': filter_subtitles_list
+				}
+			return filter_results_list
 
 	def detect_max_download_stats(self, episode_subtitle_list):
 		max_down_count = 0
@@ -122,20 +146,20 @@ class SerialZoneClient(object):
 
 		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1 and first_air_date:
 			log(__name__, "Filtr by year")
-			filtred_found_tv_shows = []
+			filtered_found_tv_shows = []
 			for found_tv_show in found_tv_shows:
 				year_reg_exp = re.compile("^([\d]{4})(|-)([\d]{4}|[\?]{4}|$)")
 				year_from, year_sep , year_to = re.search(year_reg_exp, found_tv_show["years"]).groups()
 				if year_to == "????":
-					if int(year_from) <= first_air_date.year: filtred_found_tv_shows.append(found_tv_show)
+					if int(year_from) <= first_air_date.year: filtered_found_tv_shows.append(found_tv_show)
 				elif year_to == '':
-					if int(year_from) == first_air_date.year: filtred_found_tv_shows.append(found_tv_show)
+					if int(year_from) == first_air_date.year: filtered_found_tv_shows.append(found_tv_show)
 				else:
-					if int(year_from) <= first_air_date.year and int(year_to) >= first_air_date.year: filtred_found_tv_shows.append(found_tv_show)
+					if int(year_from) <= first_air_date.year and int(year_to) >= first_air_date.year: filtered_found_tv_shows.append(found_tv_show)
 
-			if filtred_found_tv_shows.__len__() > 0 and not filtred_found_tv_shows.__len__() == found_tv_shows.__len__():
-				log(__name__, "TV show filtred by year")
-				found_tv_shows = filtred_found_tv_shows
+			if filtered_found_tv_shows.__len__() > 0 and not filtered_found_tv_shows.__len__() == found_tv_shows.__len__():
+				log(__name__, "TV show filtered by year")
+				found_tv_shows = filtered_found_tv_shows
 
 		if (found_tv_shows.__len__() == 0):
 			log(__name__,"TVShow not found, stop")
