@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="32001">Copy subtitles next to the video if video is played from rar archive</string>
+    <string id="32002">Saving</string>
+    <string id="32003">Select TV Show</string>
+    <string id="32004">Select file</string>
+    <string id="32005">Searching</string>
+    <string id="32006">Ignore articles when searching ('The')</string>
+    <string id="32007">Use TV show year as filter for searching</string>
+</strings>

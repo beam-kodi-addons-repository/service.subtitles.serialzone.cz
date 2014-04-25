@@ -9,6 +9,7 @@ class SerialZoneClient(object):
 	def __init__(self,addon):
 		self.server_url = "http://www.serialzone.cz"
 		self.addon = addon
+		self._t = addon.getLocalizedString
 
 	def download(self,link):
 
@@ -173,8 +174,7 @@ class SerialZoneClient(object):
 				else:
 					menu_dialog.append(found_tv_show['title'] + " / " + found_tv_show['orig_title'] + " - " + found_tv_show['years'])
 			dialog = xbmcgui.Dialog()
-			# TODO: translate
-			found_tv_show_id = dialog.select("Select TV show", menu_dialog)
+			found_tv_show_id = dialog.select(self._t(32003), menu_dialog)
 			if (found_tv_show_id == -1):
 				return None
 			tvshow_url = found_tv_shows[found_tv_show_id]['url']

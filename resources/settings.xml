@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="Search">
-      <setting id="ignore_articles" type="bool" label="Ignore articles when searching ('The')" default="true"/>
-      <setting id="filter_shows_by_year" type="bool" label="Use TV show year as filter for searching" default="false" />
+    <category label="32005">
+      <setting id="ignore_articles" type="bool" label="32006" default="true"/>
+      <setting id="filter_shows_by_year" type="bool" label="32007" default="false" />
     </category>
-    <category label="Save">
-      <setting id="copy_subs_if_rar_played" type="bool" label="Copy subtitles next to the video if video is played from rar" default="false" />
+    <category label="32002">
+      <setting id="copy_subs_if_rar_played" type="bool" label="32001" default="false" />
     </category>
 </settings>
