@@ -37,8 +37,7 @@ def Search(item):
   cli = SubtitlesClient(__addon__)
   found_subtitles = cli.search(item)
 
-  if (found_subtitles == [] or found_subtitles == None):
-    return False
+  if not found_subtitles: return None
 
   for subtitle in found_subtitles:
     listitem = xbmcgui.ListItem(label=subtitle['lang'],                                   # language name for the found subtitle
@@ -100,9 +99,6 @@ def get_params():
   return param
 
 params = get_params()
-
-print params
-
 
 if params['action'] == 'search' or params['action'] == 'manualsearch':
   item = {}

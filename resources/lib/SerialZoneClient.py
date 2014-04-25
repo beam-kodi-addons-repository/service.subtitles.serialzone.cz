@@ -30,19 +30,17 @@ class SerialZoneClient(object):
 
 	def search(self,item):
 
-		if item['mansearch']:
-			title = item['mansearchstr']
-		else:
-			title = item['tvshow']
-			if self.addon.getSetting("ignore_articles") == "true" and re.match(r'^The ',title,re.IGNORECASE):
-				log(__name__, "Ignoring The in Title")
-				title = re.sub(r'(?i)^The ',"", title)
+		title = item['mansearchstr'] if item['mansearch'] else item['tvshow']
+
+		if not item['mansearch'] and self.addon.getSetting("ignore_articles") == "true" and re.match(r'^The ',title,re.IGNORECASE):
+			log(__name__, "Ignoring The in Title")
+			title = re.sub(r'(?i)^The ',"", title)
 
 		tvshow_url = self.search_show_url(title)
 		if tvshow_url == None: return None
 
 		file_size = get_file_size(item['file_original_path'], item['rar'])
-		log(__name__, "File size: " + str(file_size))
+		log(__name__, "File size: %s" % file_size)
 
 		found_season_subtitles = self.search_season_subtitles(tvshow_url,item['season'])
 		log(__name__, ["Season filter", found_season_subtitles])
@@ -61,8 +59,7 @@ class SerialZoneClient(object):
 		for episode_subtitle in lang_filetred_episode_subtitle_list['versions']:
 
 			print_out_filename = episode_subtitle['rip'] + " by " + episode_subtitle['author']
-			if not episode_subtitle['notes'] == None:
-				print_out_filename = print_out_filename + "(" + episode_subtitle['notes'] + ")"
+			if episode_subtitle['notes']: print_out_filename += " (" + episode_subtitle['notes'] + ")"
 
 			result_subtitles.append({ 
 				'filename': HTMLParser.HTMLParser().unescape(print_out_filename),
@@ -73,24 +70,20 @@ class SerialZoneClient(object):
 				'lang_flag': xbmc.convertLanguage(episode_subtitle['lang'],xbmc.ISO_639_1),
 			})
 		
-		log(__name__,["Search RESULT", result_subtitles])
+		log(__name__,["Search result", result_subtitles])
 		return result_subtitles
 
 
 	def filter_episode_from_season_subtitles(self, season_subtitles, season, episode):
-		episode_subtitle_list = None
-
 		for season_subtitle in season_subtitles:
 			if (season_subtitle['episode'] == int(episode) and season_subtitle['season'] == int(season)):
-				episode_subtitle_list = season_subtitle
-				break
-
-		return episode_subtitle_list
+				return season_subtitle
+		return None
 
 	def filter_subtitles_by_language(self, set_languages, subtitles_list):
 		if not set_languages: return subtitles_list
 
-		log(__name__, ['Filter by Languages', set_languages])
+		log(__name__, ['Filter by languages', set_languages])
 		filter_subtitles_list = []
 		for subtitle in subtitles_list['versions']:
 			if xbmc.convertLanguage(subtitle['lang'],xbmc.ISO_639_2) in set_languages:
@@ -109,15 +102,12 @@ class SerialZoneClient(object):
 			if max_down_count < episode_subtitle['down_count']:
 				max_down_count = episode_subtitle['down_count']
 
-		log(__name__,"Max download count: " + str(max_down_count))
+		log(__name__,"Max download count: %s" % max_down_count)
 		return max_down_count
 
 	def search_show_url(self,title):
-		log(__name__,"Starting search by TV Show: " + title)
-
-		if (title == None or title == ''):
-			log(__name__,"No TVShow name, stop")
-			return None
+		log(__name__,"Starting search by TV Show: %s" % title)
+		if not title: return None
 
 		url_search = self.server_url + "/hledani/?" + urllib.urlencode({ "co" : title, "kde" : "serialy" })
 		log(__name__,"Search URL: " + url_search)
@@ -138,11 +128,12 @@ class SerialZoneClient(object):
 				show['years'] = show['years'].replace("&#8211;", "-")
 				found_tv_shows.append(show)
 
-		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1:
+		first_air_date = None
+		if self.addon.getSetting("filter_shows_by_year") == "true" and len(found_tv_shows) > 1:
 			log(__name__, "Getting first air date")
 			first_air_date = get_current_episode_first_air_date()
 
-		if self.addon.getSetting("filter_shows_by_year") == "true" and found_tv_shows.__len__() > 1 and first_air_date:
+		if first_air_date:
 			log(__name__, "Filtr by year")
 			filtered_found_tv_shows = []
 			for found_tv_show in found_tv_shows:
@@ -155,28 +146,29 @@ class SerialZoneClient(object):
 				else:
 					if int(year_from) <= first_air_date.year and int(year_to) >= first_air_date.year: filtered_found_tv_shows.append(found_tv_show)
 
-			if filtered_found_tv_shows.__len__() > 0 and not filtered_found_tv_shows.__len__() == found_tv_shows.__len__():
+			if len(filtered_found_tv_shows) > 0 and not len(filtered_found_tv_shows) == len(found_tv_shows):
 				log(__name__, "TV show filtered by year")
 				found_tv_shows = filtered_found_tv_shows
 
-		if (found_tv_shows.__len__() == 0):
-			log(__name__,"TVShow not found, stop")
+		if (len(found_tv_shows) == 0):
+			log(__name__,"TV Show not found")
 			return None
-		elif (found_tv_shows.__len__() == 1):
-			log(__name__,"One TVShow found, auto select")
+		elif (len(found_tv_shows) == 1):
+			log(__name__,"One TV Show found, autoselecting")
 			tvshow_url = found_tv_shows[0]['url']
 		else:
-			log(__name__,"More TVShows found, user dialog for select")
+			log(__name__,"More TV Shows found, user dialog for select")
 			menu_dialog = []
 			for found_tv_show in found_tv_shows:
 				if (found_tv_show['orig_title'] == found_tv_show['title']):
-					menu_dialog.append(found_tv_show['title'] + " - " + found_tv_show['years'])
+					dialog_item_title = found_tv_show['title'] + " - " + found_tv_show['years']
 				else:
-					menu_dialog.append(found_tv_show['title'] + " / " + found_tv_show['orig_title'] + " - " + found_tv_show['years'])
+					dialog_item_title = found_tv_show['title'] + " / " + found_tv_show['orig_title'] + " - " + found_tv_show['years']
+				menu_dialog.append(dialog_item_title)
+
 			dialog = xbmcgui.Dialog()
 			found_tv_show_id = dialog.select(self._t(32003), menu_dialog)
-			if (found_tv_show_id == -1):
-				return None
+			if (found_tv_show_id == -1): return None
 			tvshow_url = found_tv_shows[found_tv_show_id]['url']
 
 		log(__name__,"Selected show URL: " + tvshow_url)
@@ -214,6 +206,5 @@ class SerialZoneClient(object):
 					except:
 						subtitle_version['file_size'] = None
 					subtitle['versions'].append(subtitle_version)
-			# print subtitle
 			subtitles.append(subtitle)
 		return subtitles
