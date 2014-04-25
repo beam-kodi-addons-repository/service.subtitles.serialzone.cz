@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="32001">Zkopírovat soubor s titulky k adresáři s videem pokud je přehráváno z raru</string>
+    <string id="32001">Zkopírovat soubor s titulky do adresáře s videem pokud je přehráváno z raru</string>
     <string id="32002">Ukládání</string>
     <string id="32003">Vyberte seriál</string>
     <string id="32004">Vyberte soubor</string>
