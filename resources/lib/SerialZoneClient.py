@@ -3,6 +3,7 @@
 from utilities import log, get_file_size, get_current_episode_first_air_date
 import urllib, re, os, copy, xbmc, xbmcgui
 import HTMLParser
+from stats import send_statistics
 
 class SerialZoneClient(object):
 
@@ -71,6 +72,10 @@ class SerialZoneClient(object):
 			})
 		
 		log(__name__,["Search result", result_subtitles])
+
+		# call statistics
+		send_statistics('search', self.addon, title, item, len(result_subtitles))
+
 		return result_subtitles
 
 
