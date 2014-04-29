@@ -74,7 +74,7 @@ class SerialZoneClient(object):
 		log(__name__,["Search result", result_subtitles])
 
 		# call statistics
-		send_statistics('search', self.addon, title, item, len(result_subtitles))
+		if self.addon.getSetting("send_statistics") == "true": send_statistics('search', self.addon, title, item, len(result_subtitles))
 
 		return result_subtitles
 
