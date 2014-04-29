@@ -18,7 +18,10 @@ def send_statistics_to_server(data):
 def send_statistics(action, addon, title, item, result_count):
 
 	try:
-		info = { 'xbmc_uniq_id' : md5(str(uuid_node())).hexdigest() }
+		info = {
+			'action'		: action,
+			'xbmc_uniq_id' 	: md5(str(uuid_node())).hexdigest()
+		}
 
 		try:
 			data = xbmc.executeJSONRPC('{"jsonrpc" : "2.0", "method": "XBMC.GetInfoLabels", "id" :1, "params": {"labels" : \
