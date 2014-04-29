@@ -28,9 +28,9 @@ def send_statistics(action, addon, title, item, result_count):
 				["System.BuildVersion","System.ScreenHeight","System.ScreenWidth","System.KernelVersion","System.Language"]}}')  
 			data = simplejson.loads(data)
 
-			info['xbmc_screen_resolution'] 	= '%sx%s' %(data['result']['System.ScreenWidth'],data['result']['System.ScreenHeight'])
+			info['xbmc_resolution'] 	= '%sx%s' %(data['result']['System.ScreenWidth'],data['result']['System.ScreenHeight'])
 			info['xbmc_language'] 			= data['result']['System.Language']
-			info['xbmc_build_version'] 		= data['result']['System.BuildVersion']
+			info['xbmc_version'] 		= data['result']['System.BuildVersion']
 		except:
 			pass
 
@@ -43,11 +43,11 @@ def send_statistics(action, addon, title, item, result_count):
 		info['search_results_count'] 	= result_count
 		info['search_languages']		= item['3let_language']
 
-		info['input_rar'] 				= item['rar']
+		info['input_is_rar'] 			= item['rar']
 		info['input_man_search'] 		= item['mansearch']
 		info['input_year'] 				= item['year']
-		info['input_season_num']		= item['season']
-		info['input_episode_num']		= item['episode']
+		info['input_season']			= item['season']
+		info['input_episode']			= item['episode']
 		info['input_tvshow']			= item['tvshow']
 		info['input_title']				= item['title']
 
