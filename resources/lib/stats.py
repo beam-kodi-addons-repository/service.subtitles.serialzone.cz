@@ -11,7 +11,7 @@ else:
     import json as simplejson
 
 def send_statistics_to_server(data):
-	u = urllib2.urlopen("http://xbmc-repo-stats.bimovi.cz/save.php", urllib.urlencode(data), 10)
+	u = urllib2.urlopen("http://xbmc-repo-stats.bimovi.cz/save.php", urllib.urlencode({"data" : simplejson.dumps(data)}), 10)
 	log("Usage Tracking", [data, u.getcode()])
 	return u.getcode() == 201
 
