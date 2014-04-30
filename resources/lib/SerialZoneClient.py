@@ -3,7 +3,7 @@
 from utilities import log, get_file_size, get_current_episode_first_air_date
 import urllib, re, os, copy, xbmc, xbmcgui
 import HTMLParser
-from stats import send_statistics
+from stats import results_with_stats
 
 class SerialZoneClient(object):
 
@@ -28,7 +28,6 @@ class SerialZoneClient(object):
 
 		return dest
 
-
 	def search(self,item):
 
 		title = item['mansearchstr'] if item['mansearch'] else item['tvshow']
@@ -38,7 +37,7 @@ class SerialZoneClient(object):
 			title = re.sub(r'(?i)^The ',"", title)
 
 		tvshow_url = self.search_show_url(title)
-		if tvshow_url == None: return None
+		if tvshow_url == None: return results_with_stats(None, self.addon, title, item)
 
 		file_size = get_file_size(item['file_original_path'], item['rar'])
 		log(__name__, "File size: %s" % file_size)
@@ -48,11 +47,11 @@ class SerialZoneClient(object):
 
 		episode_subtitle_list = self.filter_episode_from_season_subtitles(found_season_subtitles,item['season'],item['episode'])
 		log(__name__, ["Episode filter", episode_subtitle_list])
-		if episode_subtitle_list == None: return None
+		if episode_subtitle_list == None: return results_with_stats(None, self.addon, title, item)
 
 		lang_filetred_episode_subtitle_list = self.filter_subtitles_by_language(item['3let_language'], episode_subtitle_list)
 		log(__name__, ["Language filter", lang_filetred_episode_subtitle_list])
-		if lang_filetred_episode_subtitle_list == None: return None
+		if lang_filetred_episode_subtitle_list == None: return results_with_stats(None, self.addon, title, item)
 
 		max_down_count = self.detect_max_download_stats(lang_filetred_episode_subtitle_list)
 
@@ -73,10 +72,7 @@ class SerialZoneClient(object):
 		
 		log(__name__,["Search result", result_subtitles])
 
-		# call statistics
-		if self.addon.getSetting("send_statistics") == "true": send_statistics('search', self.addon, title, item, len(result_subtitles))
-
-		return result_subtitles
+		return results_with_stats(result_subtitles, self.addon, title, item)
 
 
 	def filter_episode_from_season_subtitles(self, season_subtitles, season, episode):

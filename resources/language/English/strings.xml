@@ -8,4 +8,7 @@
     <string id="32910">Searching</string>
     <string id="32911">Ignore articles when searching ('The')</string>
     <string id="32912">Use TV show year as filter for searching</string>
+
+    <string id="32930">Statistics</string>
+    <string id="32931">Send anonymous usage statistics</string>
 </strings>
