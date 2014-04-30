@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="32001">Zkopírovat soubor s titulky do adresáře s videem pokud je přehráváno z raru</string>
-    <string id="32002">Ukládání</string>
     <string id="32003">Vyberte seriál</string>
-    <string id="32004">Vyberte soubor</string>
-    <string id="32005">Vyhledávání</string>
-    <string id="32006">Vynechat člen 'The' z názvu seriálu</string>
-    <string id="32007">Filtrovat seriály podle roku vysílání</string>
+
+    <string id="32900">Ukládání</string>
+    <string id="32901">Zkopírovat titulky do adresáře s videem pokud je přehráváno z raru</string>
+
+    <string id="32910">Vyhledávání</string>
+    <string id="32911">Vynechat člen 'The' z názvu seriálu</string>
+    <string id="32912">Filtrovat seriály podle roku vysílání</string>
 </strings>
