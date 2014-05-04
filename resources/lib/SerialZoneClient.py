@@ -91,6 +91,9 @@ class SerialZoneClient(object):
 				filter_subtitles_list.append(subtitle)
 
 		if not filter_subtitles_list:
+			if "cze" not in set_languages and "slo" not in set_languages:
+				dialog = xbmcgui.Dialog()
+				dialog.ok(self.addon.getAddonInfo('name'), self._t(32100))
 			return None
 		else:
 			filter_results_list = copy.deepcopy(subtitles_list)
