@@ -30,11 +30,24 @@ class SerialZoneClient(object):
 
 	def search(self,item):
 
-		title = item['mansearchstr'] if item['mansearch'] else item['tvshow']
+		if item['mansearch']:
+			title = item['mansearchstr']
+			dialog = xbmcgui.Dialog()
+			item['season'] = dialog.numeric(0, self._t(32111), item['season'])
+			item['episode'] = dialog.numeric(0, self._t(32111), item['episode'])
+		else:
+			title = item['tvshow']
+			if self.addon.getSetting("ignore_articles") == "true" and re.match(r'^The ',title,re.IGNORECASE):
+				log(__name__, "Ignoring The in Title")
+				title = re.sub(r'(?i)^The ',"", title)
 
-		if not item['mansearch'] and self.addon.getSetting("ignore_articles") == "true" and re.match(r'^The ',title,re.IGNORECASE):
-			log(__name__, "Ignoring The in Title")
-			title = re.sub(r'(?i)^The ',"", title)
+		if not title or not item['season'] or not item['episode']:
+			xbmc.executebuiltin("XBMC.Notification(%s,%s,5000,%s)" % (
+						self.addon.getAddonInfo('name'), self._t(32110),
+						os.path.join(xbmc.translatePath(self.addon.getAddonInfo('path')).decode("utf-8"),'icon.png')
+			))
+			log(__name__, ["Input validation error", title, item['season'], item['episode']])
+			return results_with_stats(None, self.addon, title, item)
 
 		tvshow_url = self.search_show_url(title)
 		if tvshow_url == None: return results_with_stats(None, self.addon, title, item)
