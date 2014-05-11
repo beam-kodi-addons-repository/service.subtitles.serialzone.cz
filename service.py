@@ -142,6 +142,7 @@ if params['action'] == 'search' or params['action'] == 'manualsearch':
     stackPath = item['file_original_path'].split(" , ")
     item['file_original_path'] = stackPath[0][8:]
   
+  log(__scriptname__,["Input", item])
   Search(item)  
 
 elif params['action'] == 'download':
