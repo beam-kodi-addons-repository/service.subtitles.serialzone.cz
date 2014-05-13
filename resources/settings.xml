@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <category label="32910">
-      <setting id="ignore_articles" type="bool" label="32911" default="true"/>
+      <setting id="ignore_articles" type="bool" label="32913" default="true"/>
       <setting id="filter_shows_by_year" type="bool" label="32912" default="false" />
+      <setting id="search_title_in_brackets" type="bool" label="32911" default="true"/>
     </category>
     <category label="32900">
       <setting id="copy_subs_if_rar_played" type="bool" label="32901" default="false" />
