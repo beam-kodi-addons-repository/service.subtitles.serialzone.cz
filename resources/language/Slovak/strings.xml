@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="32003">Vyberte seriál</string>
+
+    <string id="32100">Doplnok je určený pre slovenských a českých titulky, skontrolujte Vaše nastavenia jazykov, pre ktoré chcete titulky sťahovať.</string>
+    <string id="32101">Otvoriť nastavenia?</string>
+
+    <string id="32110">Zadajte retazec na vyhladanie</string>
+    <string id="32111">Zadajte číslo rady seriálu</string>
+    <string id="32112">Zadajte číslo epizódy seriálu</string>
+
+    <string id="32910">Vyhľadávanie</string>
+    <string id="32911">Použiť text v zátvorke v mene ako základ pre vyhľadávanie</string>
+    <string id="32912">Filtrovať seriály podľa roku vysielania</string>
+    <string id="32913">Vynechať člen 'The' z názvu seriálu</string>
+
+    <string id="32930">Štatistiky</string>
+    <string id="32931">Odosielať anonymné štatistiky o využití doplnku</string>
+</strings>
