@@ -13,6 +13,7 @@
     <string id="32911">Use text in brackets as search pattern and normalize</string>
     <string id="32912">Use TV show year as filter for searching</string>
     <string id="32913">Ignore articles when searching ('The')</string>
+    <string id="32914">Clean title search prior to the excess text (brackets, formatting, etc.).</string>
 
     <string id="32930">Statistics</string>
     <string id="32931">Send anonymous usage statistics</string>

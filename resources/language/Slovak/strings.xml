@@ -13,6 +13,7 @@
     <string id="32911">Použiť text v zátvorke v mene ako základ pre vyhľadávanie</string>
     <string id="32912">Filtrovať seriály podľa roku vysielania</string>
     <string id="32913">Vynechať člen 'The' z názvu seriálu</string>
+    <string id="32914">Vyčistiť názov pred vyhľadávaním o prebytočný text (zátvorky, formátovanie, atď.)</string>
 
     <string id="32930">Štatistiky</string>
     <string id="32931">Odosielať anonymné štatistiky o využití doplnku</string>

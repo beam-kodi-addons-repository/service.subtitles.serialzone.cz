@@ -13,6 +13,7 @@
     <string id="32911">Použít text v závorce ve jméně jako základ pro vyhledávaní</string>
     <string id="32912">Filtrovat seriály podle roku vysílání</string>
     <string id="32913">Vynechat člen 'The' z názvu seriálu</string>
+    <string id="32914">Vyčistit název před vyhledáváním o přebytečný text (závorky, formátování, atd..)</string>
 
     <string id="32930">Statistiky</string>
     <string id="32931">Odesílat anonymní statistiky o využití doplňku</string>
