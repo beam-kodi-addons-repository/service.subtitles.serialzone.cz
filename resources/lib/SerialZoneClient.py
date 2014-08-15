@@ -50,7 +50,7 @@ class SerialZoneClient(object):
 			title = item['mansearchstr']
 			dialog = xbmcgui.Dialog()
 			item['season'] = dialog.numeric(0, self._t(32111), item['season'])
-			item['episode'] = dialog.numeric(0, self._t(32111), item['episode'])
+			item['episode'] = dialog.numeric(0, self._t(32112), item['episode'])
 		else:
 			title = self.normalize_input_title(item['tvshow'])
 			if self.addon.getSetting("ignore_articles") == "true" and re.match(r'^The ',title,re.IGNORECASE):
