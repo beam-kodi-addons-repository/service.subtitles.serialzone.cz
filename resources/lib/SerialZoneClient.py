@@ -3,7 +3,7 @@
 from utilities import log, get_file_size, get_current_episode_first_air_date
 import urllib, re, os, copy, xbmc, xbmcgui
 import HTMLParser
-from stats import results_with_stats
+from usage_stats import results_with_stats
 
 class SerialZoneClient(object):
 
