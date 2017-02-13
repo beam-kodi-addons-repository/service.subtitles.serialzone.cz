@@ -227,10 +227,10 @@ class SerialZoneClient(object):
 					if subtitle_version['lang'] == "CZ": subtitle_version['lang'] = "Czech"
 					if subtitle_version['lang'] == "SK": subtitle_version['lang'] = "Slovak"
 					subtitle_version['link'] = re.search("<a href=\"(.+?)\" .+? class=\"sub-info-menu sb-down\">",html_subtitle).group(1)
-					subtitle_version['author'] = re.sub("<[^<]+?>", "",(re.search("<div class=\"sub-info-auth\">(.+?)</div>",html_subtitle).group(1)))
-					subtitle_version['rip'] = re.search("<div class=\"sil\">Verze / Rip:</div><div class=\"sid\"><b>(.+?)</b>",html_subtitle).group(1)
+					subtitle_version['author'] = re.sub("<[^<]+?>", "",(re.search("<div class=\"sub-info-auth\">(.+?)</div>",html_subtitle).group(1))).decode("utf-8",'replace')
+					subtitle_version['rip'] = re.search("<div class=\"sil\">Verze / Rip:</div><div class=\"sid\"><b>(.+?)</b>",html_subtitle).group(1).decode("utf-8",'replace')
 					try:
-						subtitle_version['notes'] = re.search("<div class=\"sil\">Poznámka:</div><div class=\"sid\">(.+?)</div>",html_subtitle).group(1)
+						subtitle_version['notes'] = re.search("<div class=\"sil\">Poznámka:</div><div class=\"sid\">(.+?)</div>",html_subtitle).group(1).decode("utf-8",'replace')
 					except:
 						subtitle_version['notes'] = None
 					subtitle_version['down_count'] = int(re.search("<div class=\"sil\">Počet stažení:</div><div class=\"sid2\">(.+?)x</div>",html_subtitle).group(1))
