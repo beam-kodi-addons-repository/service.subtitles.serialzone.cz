@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from utilities import log, get_file_size, get_current_episode_first_air_date
 import urllib, re, os, copy, xbmc, xbmcgui
 import HTMLParser
-from usage_stats import results_with_stats
+from usage_stats import results_with_stats, mark_start_time
 
 class SerialZoneClient(object):
 
@@ -11,6 +11,7 @@ class SerialZoneClient(object):
 		self.server_url = "http://www.serialzone.cz"
 		self.addon = addon
 		self._t = addon.getLocalizedString
+		mark_start_time()
 
 	def download(self,link):
 
@@ -33,11 +34,11 @@ class SerialZoneClient(object):
 			log(__name__, "Searching title in brackets - %s" % title)
 			search_second_title = re.match(r'.+ \((.{3,})\)',title)
 			if search_second_title and not re.search(r'^[\d]{4}$',search_second_title.group(1)): title = search_second_title.group(1)
-		
+
 		if re.search(r', The$',title,re.IGNORECASE):
 			log(__name__, "Swap The - %s" % title)
 			title =  "The " + re.sub(r'(?i), The$',"", title) # normalize The
-		
+
 		if self.addon.getSetting("try_cleanup_title") == "true":
 			log(__name__, "Title cleanup - %s" % title)
 			title = re.sub(r"(\[|\().+?(\]|\))","",title) # remove [xy] and (xy)
@@ -90,7 +91,7 @@ class SerialZoneClient(object):
 			print_out_filename = episode_subtitle['rip'] + " by " + episode_subtitle['author']
 			if episode_subtitle['notes']: print_out_filename += " (" + episode_subtitle['notes'] + ")"
 
-			result_subtitles.append({ 
+			result_subtitles.append({
 				'filename': HTMLParser.HTMLParser().unescape(print_out_filename),
 				'link': episode_subtitle['link'],
 				'lang': episode_subtitle['lang'],
@@ -98,7 +99,7 @@ class SerialZoneClient(object):
 				'sync': (episode_subtitle['file_size'] == file_size and file_size > 0),
 				'lang_flag': xbmc.convertLanguage(episode_subtitle['lang'],xbmc.ISO_639_1),
 			})
-		
+
 		log(__name__,["Search result", result_subtitles])
 
 		return results_with_stats(result_subtitles, self.addon, title, item)
